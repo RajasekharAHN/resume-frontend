@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Resume Analyzer | Tailor Your Resume for the Role</title>
+<meta name="description" content="Resume Skill Match Analyzer - Analyze your resume against job descriptions using AI.">
+<meta name="keywords" content="resume analyzer, skill matcher, job match, resume parser, AI resume tool">
+<link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml">
+<link href="css/styles.css" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+</head>
+<body>
+<div class="app-container">
+<!-- Header Section -->
+<header>
+<div class="logo">
+<i class="fas fa-file-contract"></i>
+<h1>Resume Analyzer</h1>
+</div>
+<nav>
+<ul>
+<li><a class="active" href="#">Home</a></li>
+<li><a href="#how-it-works">How It Works</a></li>
+<li><a href="#about">About</a></li>
+</ul>
+</nav>
+</header>
+<!-- Hero Section -->
+<section class="hero">
+<div class="hero-content">
+<h1>Resume Analysis</h1>
+<p>Upload your resume and a job description to see how well they match. We will identify matching skills, missing qualifications, and give you a match score to help you land your dream job.</p>
+<a class="cta-button" href="#upload-section">Analyze Your Resume</a>
+</div>
+<div class="hero-image">
+<!-- Inline SVG placeholder instead of external image -->
+<svg height="300" viewbox="0 0 400 300" width="400" xmlns="http://www.w3.org/2000/svg">
+<rect fill="#f0f9ff" height="300" width="400"></rect>
+<rect fill="#ffffff" height="250" rx="10" stroke="#4f46e5" stroke-width="2" width="200" x="100" y="50"></rect>
+<rect fill="#e6f7ff" height="20" rx="5" width="160" x="120" y="80"></rect>
+<rect fill="#e6f7ff" height="10" rx="5" width="160" x="120" y="110"></rect>
+<rect fill="#e6f7ff" height="10" rx="5" width="160" x="120" y="130"></rect>
+<rect fill="#e6f7ff" height="10" rx="5" width="160" x="120" y="150"></rect>
+<rect fill="#4f46e5" height="70" opacity="0.7" rx="5" width="70" x="120" y="180"></rect>
+<text fill="white" font-family="Arial" font-size="24" text-anchor="middle" x="155" y="225">85%</text>
+<rect fill="#e6f7ff" height="10" rx="5" width="80" x="200" y="180"></rect>
+<rect fill="#e6f7ff" height="10" rx="5" width="80" x="200" y="200"></rect>
+<rect fill="#e6f7ff" height="10" rx="5" width="80" x="200" y="220"></rect>
+<rect fill="#e6f7ff" height="10" rx="5" width="80" x="200" y="240"></rect>
+</svg>
+</div>
+</section>
+<!-- Main Content -->
+<main>
+<!-- Upload Section -->
+<section class="upload-section" id="upload-section">
+<div class="section-header">
+<h2>Analyze Your Resume</h2>
+<p>Upload your resume and job description to see how well they match</p>
+</div>
+<div class="upload-container">
+<form id="upload-form">
+<div class="file-upload-area">
+<div class="file-upload" id="resume-upload">
+<div class="file-upload-icon">
+<i class="fas fa-file-alt"></i>
+</div>
+<h3>Upload Resume</h3>
+<p>Drag &amp; drop your resume or click to browse</p>
+<p class="file-types">Supported formats: PDF, DOCX, TXT</p>
+<input accept=".pdf,.docx,.txt" id="resume" name="resume" required="" type="file"/>
+<div class="file-info" id="resume-info"></div>
+</div>
+<div class="file-upload" id="job-desc-upload">
+<div class="file-upload-icon">
+<i class="fas fa-briefcase"></i>
+</div>
+<h3>Upload Job Description</h3>
+<p>Drag &amp; drop job description or click to browse</p>
+<p class="file-types">Supported formats: PDF, DOCX, TXT</p>
+<input accept=".pdf,.docx,.txt" id="job-description" name="job_description" required="" type="file"/>
+<div class="file-info" id="job-desc-info"></div>
+</div>
+</div>
+<div class="submit-container">
+<button class="submit-button" id="submit-btn" type="submit">
+<i class="fas fa-search"></i> Analyze Match
+                            </button>
+</div>
+</form>
+</div>
+</section>
+<!-- Loading Section -->
+<section class="loading-section hidden" id="loading-section">
+<div class="loading-container">
+<div class="loading-spinner"></div>
+<h3>Analyzing Your Resume</h3>
+<p>Please wait while we compare your resume with the job description...</p>
+<div class="loading-steps">
+<div class="loading-step" id="step1">
+<i class="fas fa-file-import"></i>
+<span>Processing Files</span>
+</div>
+<div class="loading-step" id="step2">
+<i class="fas fa-search"></i>
+<span>Extracting Skills</span>
+</div>
+<div class="loading-step" id="step3">
+<i class="fas fa-chart-bar"></i>
+<span>Calculating Match</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Results Section -->
+<section class="results-section hidden" id="results-section">
+<div class="section-header">
+<h2>Analysis Results</h2>
+<p>Here's how your resume matches the job description</p>
+</div>
+<div class="results-container">
+<!-- Match Score Card -->
+<div class="results-card match-score-card">
+<div class="match-score-container">
+<h3>Match Score</h3>
+<div class="circular-progress">
+<div class="circular-progress-inner">
+<span id="percentage-value">0%</span>
+</div>
+</div>
+<p id="match-message">Your resume needs improvement for this job</p>
+</div>
+</div>
+<!-- Skills Overview Card -->
+<div class="results-card skills-overview-card">
+<h3>Skills Overview</h3>
+<div class="skills-chart-container">
+<div class="chart-toggle-buttons">
+<button class="chart-btn active" data-type="pie">Pie</button>
+<button class="chart-btn" data-type="bar">Bar</button>
+
+<button class="chart-btn" data-type="venn">Venn</button>
+</div>
+<canvas id="skills-chart"></canvas>
+
+<div class="hidden" id="skills-venn-view">
+<svg height="200" id="venn-diagram" width="300">
+<circle cx="120" cy="100" fill="#6366f1" fill-opacity="0.4" r="60"></circle>
+<circle cx="180" cy="100" fill="#10b981" fill-opacity="0.4" r="60"></circle>
+<text fill="#1f2937" font-size="14" id="resume-count" x="80" y="100"></text>
+<text fill="#1f2937" font-size="14" id="job-count" x="220" y="100"></text>
+<text fill="#1f2937" font-size="14" font-weight="bold" id="match-count" x="145" y="100"></text>
+</svg>
+</div>
+</div>
+<div class="skills-count">
+<div class="count-item">
+<span class="count" id="resume-skills-count">0</span>
+<span class="label">Resume Skills</span>
+</div>
+<div class="count-item">
+<span class="count" id="job-skills-count">0</span>
+<span class="label">Job Skills</span>
+</div>
+<div class="count-item matching">
+<span class="count" id="matching-skills-count">0</span>
+<span class="label">Matching</span>
+</div>
+<div class="count-item missing">
+<span class="count" id="missing-skills-count">0</span>
+<span class="label">Missing</span>
+</div>
+</div>
+</div>
+<!-- Tabs for detailed results -->
+<div class="results-card detailed-results-card">
+<div class="tabs">
+<button class="tab-btn active" data-tab="matching">Matching Skills</button>
+<button class="tab-btn" data-tab="missing">Missing Skills</button>
+<button class="tab-btn" data-tab="resume">Resume Skills</button>
+<button class="tab-btn" data-tab="job">Job Requirements</button>
+</div>
+<div class="tab-content">
+<!-- Matching Skills Tab -->
+<div class="tab-pane active" id="matching-tab">
+<div class="skills-header">
+<i class="fas fa-check-circle"></i>
+<h3>Matching Skills</h3>
+</div>
+<p class="tab-description">These skills from your resume match the job requirements:</p>
+<div class="skills-grid" id="matching-skills-grid"></div>
+</div>
+<!-- Missing Skills Tab -->
+<div class="tab-pane" id="missing-tab">
+<div class="skills-header">
+<i class="fas fa-times-circle"></i>
+<h3>Missing Skills</h3>
+</div>
+<p class="tab-description">Consider adding these skills to your resume to improve your match:</p>
+<div class="skills-grid" id="missing-skills-grid"></div>
+</div>
+<!-- Resume Skills Tab -->
+<div class="tab-pane" id="resume-tab">
+<div class="skills-header">
+<i class="fas fa-file-alt"></i>
+<h3>Skills on Your Resume</h3>
+</div>
+<p class="tab-description">All skills our system detected in your resume:</p>
+<div class="skills-grid" id="resume-skills-grid"></div>
+</div>
+<!-- Job Requirements Tab -->
+<div class="tab-pane" id="job-tab">
+<div class="skills-header">
+<i class="fas fa-briefcase"></i>
+<h3>Job Requirements</h3>
+</div>
+<p class="tab-description">Skills required according to the job description:</p>
+<div class="skills-grid" id="job-skills-grid"></div>
+</div>
+</div>
+</div>
+<!-- Suggestions Card -->
+<div class="results-card suggestions-card">
+<h3>Suggestions to Improve Your Match</h3>
+<div id="suggestions-container">
+<ul id="suggestions-list"></ul>
+</div>
+</div>
+<!-- Actions -->
+<div class="results-actions">
+<button class="action-button" id="download-report-btn">
+<i class="fas fa-download"></i> Download Report
+                        </button>
+<button class="action-button secondary" id="new-analysis-btn">
+<i class="fas fa-redo"></i> New Analysis
+                        </button>
+</div>
+</div>
+</section>
+<!-- How It Works Section -->
+<section class="how-it-works-section" id="how-it-works">
+<div class="section-header">
+<h2>How It Works</h2>
+<p>Our resume analyzer helps you match your skills to job requirements</p>
+</div>
+<div class="steps-container">
+<div class="step">
+<div class="step-icon">
+<i class="fas fa-upload"></i>
+</div>
+<h3>Upload Documents</h3>
+<p>Upload your resume and the job description you're interested in</p>
+</div>
+<div class="step">
+<div class="step-icon">
+<i class="fas fa-robot"></i>
+</div>
+<h3>Analysis</h3>
+<p>Our tool analyzes the text to extract skills and requirements</p>
+</div>
+<div class="step">
+<div class="step-icon">
+<i class="fas fa-chart-pie"></i>
+</div>
+<h3>Get Results</h3>
+<p>See your match percentage and detailed skills breakdown</p>
+</div>
+<div class="step">
+<div class="step-icon">
+<i class="fas fa-pencil-alt"></i>
+</div>
+<h3>Improve Resume</h3>
+<p>Use insights to tailor your resume for better job matches</p>
+</div>
+</div>
+</section>
+<!-- About Section -->
+<section class="about-section" id="about">
+<div class="section-header">
+<h2>About Resume Analyzer</h2>
+<p>Helping job seekers optimize their resumes for better opportunities</p>
+</div>
+<div class="about-content">
+<div class="about-text">
+<p>Resume Analyzer uses advanced natural language processing to compare your resume against job descriptions. Our tool identifies matching skills and highlights missing qualifications to help you tailor your resume for specific positions.</p>
+<p>The system uses pattern matching and text similarity algorithms to extract skills from both documents and calculate a match percentage. By understanding exactly what employers are looking for, you can customize your application materials to increase your chances of getting an interview.</p>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer>
+<div class="footer-content">
+<div class="footer-logo">
+<i class="fas fa-file-contract"></i>
+<h2>Resume Analyzer</h2>
+</div>
+<div class="footer-links">
+<h3>Quick Links</h3>
+<ul>
+<li><a href="#">Home</a></li>
+<li><a href="#how-it-works">How It Works</a></li>
+<li><a href="#about">About</a></li>
+</ul>
+</div>
+<div class="footer-contact">
+<h3>Contact</h3>
+<p><i class="fas fa-envelope"></i> himanagarajasekhar@support.com</p>
+</div>
+</div>
+<div class="footer-bottom">
+<p>© 2025 Resume Analyzer. All rights reserved.</p>
+</div>
+</footer>
+</div>
+<!-- Scripts -->
+ 
+<script src="js/app.js"></script>
+</body>
+</html>
